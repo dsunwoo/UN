@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 
 # URL for the UN data set
-url = "http://web.archive.org/web/20110514112442/http://unstats.un.org/unsd/demographic/products/socind/education.htm"
+url = "https://raw.githubusercontent.com/dsunwoo/UN/master/Scrape.html"
 
 r = requests.get(url)
 soup = BeautifulSoup(r.content)
@@ -13,7 +13,7 @@ for index, row in enumerate(soup('table')):
     print(row)
 
 # Working table
-main_table = soup('table')[6]
+main_table = soup('table')[11]
 # Find data in each row
 for index, row in enumerate(main_table('tr')):
     if row.get_text().find("Country or area") != -1 and row.get_text().find("Year") != -1 and row.get_text().find("Total") != -1:
