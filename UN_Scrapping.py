@@ -21,42 +21,49 @@ main_table = soup('table')[11]
 header_row = main_table('tr')[7]
 
 # Setting up dictionaries
-d_year = {}
-d_total = {}
-d_men = {}
-d_women = {}
+d_data = {}
+# d_year = {}
+# d_total = {}
+# d_men = {}
+# d_women = {}
 
 # Scrape the data from table
 country_list = []
+data_list = []
 for x in range(8, 191):
     data_row = main_table('tr')[x]
     data = []
     for cell in data_row('td'):
         data.append(cell.get_text())
     # Populate dictionaries with appropriate cell values
-    country_list.append(data[0])
-    d_year[data[0]] = data[1]
-    d_total[data[0]] = data[4]
-    d_men[data[0]] = data[7]
-    d_women[data[0]] = data[10]
+    data_list.append([data[0], int(data[1]), int(data[4]), int(data[7]), int(data[10])])
+    # country_list.append(data[0])
 
 # Setup database
-col_names = ('Country', 'Year', 'Discard1', 'Discard2', 'Total', 'Men', 'Women')
 con = lite.connect('education.db')
 cur = con.cursor()
 with con:
     cur.executescript('DROP TABLE IF EXISTS school_life')
     cur.execute('CREATE TABLE school_life '
-                '(Country STRING, '
+                '(Country TEXT, '
                 'Year INT, '
-                'Discard1 STRING, '
-                'Discard2 STRING, '
                 'Total INT, '
                 'Men INT, '
                 'Women INT);'
                 )
-# Create an empty dataset
+# populate database
+with con:
+    # Create an empty dataset
+    # for country in range(0, len(country_list)-1):
+    #    cur.execute("INSERT INTO school_life(Country) VALUES (?)", (country_list[country],))
+# Insert data into table
+    cur.executemany('INSERT INTO school_life VALUES (?,?,?,?,?)', data_list)
 
-
+    # for x in range(0, len(data_list)-1):
+    #    cur.execute('UPDATE school_life SET Country = ' + data_list[x][0] +
+    #                ', Year = ' + data_list[x][1] +
+    #                ', Total = ' + data_list[x][4] +
+    #                ', Men = ' + data_list[x][7] +
+    #                ', Women = ' + data_list[x][10])
 con.close
 
