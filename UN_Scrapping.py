@@ -39,6 +39,7 @@ con = lite.connect('education.db')
 cur = con.cursor()
 with con:
     cur.executescript('DROP TABLE IF EXISTS school_life')
+    cur.executescript('DROP TABLE IF EXISTS gdp')
     cur.execute('CREATE TABLE school_life '
                 '(Country TEXT, '
                 'Year INT, '
@@ -46,9 +47,19 @@ with con:
                 'Men INT, '
                 'Women INT);'
                 )
-# populate database
+    cur.execute('CREATE TABLE gdp'
+                '(country_name TEXT,'
+                '_1999 REAL, _2000 REAL, _2001 REAL, _2002 REAL,'
+                '_2003 REAL, _2004 REAL, _2005 REAL, _2006 REAL,'
+                '_2007 REAL, _2008 REAL, _2009 REAL, _2010 REAL);'
+                )
+# populate databases
 with con:
     cur.executemany('INSERT INTO school_life VALUES (?,?,?,?,?)', data_list)
+    cur.execute('INSERT INTO gdp '
+                '(country_name, _1999, _2000, _2001, _2002, '
+                '_2003, _2004, _2005, _2006, _2007, _2008, _2009, _2010) '
+                'VALUES ("' + line[0] + '","' + '","'.join(line[42:-5]) + '");')
 # place table into a dataframe
 df = pd.read_sql_query("SELECT * FROM school_life", con, index_col="Country")
 con.close()
