@@ -58,4 +58,6 @@ men_mean = df['Men'].mean()
 men_median = df['Men'].median()
 women_mean = df['Women'].mean()
 women_median = df['Women'].median()
-
+print("\nSchool Life Expectancy Statistics:\n")
+print("Men - Mean = {}    Median = {}".format(str(round(men_mean, 2)), str(men_median)))
+print("Women - Mean = {}    Median = {}\n".format(str(round(women_mean, 2)), str(women_median)))
