@@ -24,9 +24,6 @@ soup = BeautifulSoup(r.content)
 main_table = soup('table')[11]
 header_row = main_table('tr')[7]
 
-# Setting up dictionaries
-d_data = {}
-
 # Scrape the data from table
 data_list = []
 for x in range(8, 191):
@@ -52,5 +49,13 @@ with con:
 # populate database
 with con:
     cur.executemany('INSERT INTO school_life VALUES (?,?,?,?,?)', data_list)
-con.close
+# place table into a dataframe
+df = pd.read_sql_query("SELECT * FROM school_life", con, index_col="Country")
+con.close()
+
+# Basic stats
+men_mean = df['Men'].mean()
+men_median = df['Men'].median()
+women_mean = df['Women'].mean()
+women_median = df['Women'].median()
 
