@@ -1,7 +1,7 @@
 import csv
 import sqlite3 as lite
 
-with open('/home/dssquared/PycharmProjects/Training/UN/Metadata_Indicator_API_3_DS2_en_csv_v2.csv', 'rU') as inputFile:
+with open('/home/dssquared/PycharmProjects/Training/UN/Metadata_Indicator_API_NY.GDP.MKTP.CD_DS2_en_csv_v2.csv', 'rU') as inputFile:
     next(inputFile)  # skip the first two lines
     next(inputFile)
     header = next(inputFile)
